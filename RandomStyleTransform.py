@@ -22,7 +22,8 @@ class RandomStyleTransform:
         # load weights of randomly chosen style
         image_transform_net = itn.ImageTransformNet().to(device)
         n_styles = len(self.style_weights)
-        random_choice = random.randint(0, n_styles - 1)
+        print(n_styles)
+        random_choice = random.randint(0, n_styles-1)
         random_style_weights = self.style_weights[random_choice]
         image_transform_net.load_state_dict(random_style_weights)
 
