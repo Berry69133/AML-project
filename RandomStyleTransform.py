@@ -8,10 +8,9 @@ import ImageTransformNet as itn
 class RandomStyleTransform:
     def __init__(self):
         # load style weights
-        styles_path = glob.glob("./style_weight/*.pth")
+        styles_path = glob.glob(".\style_weight\*.pth")
         self.style_weights = []
         for style_path in styles_path:
-            style_path = style_path.split("/")[-1]
             self.style_weights.append(torch.load(style_path))
 
     # expected input tensor of size (BxCxHxW)
