@@ -1,6 +1,7 @@
 import torch
 import glob
 import random
+import sys
 
 import ImageTransformNet as itn
 
@@ -8,7 +9,11 @@ import ImageTransformNet as itn
 class RandomStyleTransform:
     def __init__(self):
         # load style weights
-        styles_path = glob.glob(".\style_weight\*.pth")
+        if sys.platform == 'linux':
+            styles_path = glob.glob("./style_weight/*.pth")
+        else:
+            styles_path = glob.glob(".\style_weight\*.pth")
+
         self.style_weights = []
         for style_path in styles_path:
             self.style_weights.append(torch.load(style_path))
