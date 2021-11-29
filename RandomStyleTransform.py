@@ -2,8 +2,8 @@ import torch
 import glob
 import random
 import os
-
 import ImageTransformNet as itn
+from FER2013Dataset import FER2013Dataset
 
 
 class RandomStyleTransform:
@@ -16,20 +16,27 @@ class RandomStyleTransform:
             self.style_weights.append(torch.load(style_path))
 
     # expected input tensor of size (BxCxHxW)
-    def apply(self, images):
+    def apply(self, dataset: FER2013Dataset, weights):
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        images = images.to(device)
+        images = dataset.get_images().to(device)
+        labels = dataset.get_labels().to(device)
 
-        # load weights of randomly chosen style
         image_transform_net = itn.ImageTransformNet().to(device)
         n_styles = len(self.style_weights)
-        random_choice = random.randint(0, n_styles-1)
-        random_style_weights = self.style_weights[random_choice]
-        image_transform_net.load_state_dict(random_style_weights)
+        for label, weight in enumerate(weights):
+            class_images = images[labels == label]
+            for class_image in class_images:
+                # load weights of randomly chosen style
+                random_choice = random.randint(0, n_styles - 1)
+                random_style_weights = self.style_weights[random_choice]
+                image_transform_net.load_state_dict(random_style_weights)
 
-        # apply transformation
-        with torch.no_grad():
-            generated_images = image_transform_net(images)
+                # apply transformation
+                with torch.no_grad():
+                    generated_image = image_transform_net(class_image)
 
-        return generated_images
+                dataset.append_images(generated_image)
+                dataset.append_labels(label)
+
+        return dataset
