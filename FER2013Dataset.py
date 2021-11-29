@@ -51,7 +51,7 @@ class FER2013Dataset(Dataset):
         return (image, label)
 
     def append_labels(self, to_append):
-        self._labels = torch.cat((self._labels, to_append), dim=0).to(self.device)
+        self._labels = torch.cat((self._labels, to_append.to(self.device)), dim=0)
 
     def append_images(self, to_append):
-        self._images = torch.cat((self._images, to_append), dim=0).to(self.device)
+        self._images = torch.cat((self._images, to_append.to(self.device)), dim=0)
