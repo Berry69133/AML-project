@@ -27,6 +27,7 @@ class RandomStyleTransform:
         for label, weight in enumerate(weights):
             class_images = images[labels == label]
             for class_image in class_images:
+                class_image = class_image.unsquueze()
                 # load weights of randomly chosen style
                 random_choice = random.randint(0, n_styles - 1)
                 random_style_weights = self.style_weights[random_choice]
