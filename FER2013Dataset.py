@@ -40,7 +40,7 @@ class FER2013Dataset(Dataset):
         return self._images
 
     def __len__(self):
-        return len(self.images)
+        return len(self._images)
 
     def __getitem__(self, idx):
         image = self._images[idx]
