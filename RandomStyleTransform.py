@@ -38,6 +38,6 @@ class RandomStyleTransform:
                     generated_image = image_transform_net(class_image)
 
                 dataset.append_images(generated_image)
-                dataset.append_labels(label)
+                dataset.append_labels(torch.tensor(label))
 
         return dataset
