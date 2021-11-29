@@ -19,6 +19,7 @@ class RandomStyleTransform:
     def apply(self, dataset: FER2013Dataset, weights):
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
+        dataset = dataset.to(device)
         images = dataset.get_images().to(device)
         labels = dataset.get_labels().to(device)
 
