@@ -30,7 +30,7 @@ class RandomStyleTransform:
                 class_image = class_image.unsqueeze(0)
                 # load weights of randomly chosen style
                 random_choice = random.randint(0, n_styles - 1)
-                random_style_weights = self.style_weights[random_choice]
+                random_style_weights = self.style_weights[0]
                 image_transform_net.load_state_dict(random_style_weights)
 
                 # apply transformation
