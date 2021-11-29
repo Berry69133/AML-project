@@ -11,7 +11,7 @@ class FER2013Dataset(Dataset):
         path = './fer2013/{}'.format(dir)
         images = []
         labels = []
-        device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
         for label_dir in os.listdir(path):
             label_dir_path = path + '/' + label_dir
@@ -51,7 +51,7 @@ class FER2013Dataset(Dataset):
         return (image, label)
 
     def append_labels(self, to_append):
-        self._labels = torch.cat((self._labels, to_append), dim=0)
+        self._labels = torch.cat((self._labels, to_append), dim=0).to(self.device)
 
     def append_images(self, to_append):
-        self._images = torch.cat((self._images, to_append), dim=0)
+        self._images = torch.cat((self._images, to_append), dim=0).to(self.device)
