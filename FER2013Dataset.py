@@ -31,8 +31,8 @@ class FER2013Dataset(Dataset):
                 images.append(image)
                 labels.append(label)
 
-        self._images = torch.from_numpy(np.array(images)).to(device)
-        self._labels = torch.from_numpy(np.array(labels)).to(device)
+        self._images = torch.from_numpy(np.array(images)).to(self.device)
+        self._labels = torch.from_numpy(np.array(labels)).to(self.device)
 
     def get_labels(self):
         return self._labels
