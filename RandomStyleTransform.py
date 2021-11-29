@@ -13,6 +13,7 @@ class RandomStyleTransform:
 
         self.style_weights = []
         for style_path in styles_path:
+            print(style_path)
             self.style_weights.append(torch.load(style_path))
 
     # expected input tensor of size (BxCxHxW)
@@ -30,7 +31,7 @@ class RandomStyleTransform:
                 class_image = class_image.unsqueeze(0)
                 # load weights of randomly chosen style
                 random_choice = random.randint(0, n_styles - 1)
-                random_style_weights = self.style_weights[0]
+                random_style_weights = self.style_weights[1]
                 image_transform_net.load_state_dict(random_style_weights)
 
                 # apply transformation
