@@ -22,7 +22,7 @@ class FER2013Dataset(Dataset):
                 # features processing
                 image = cv2.imread(image_path)
                 image = image.astype('float32')
-                image = image / 255
+                #image = image / 255
                 image = image.swapaxes(0, 2)  # channel last to channel first
 
                 # labels processing
