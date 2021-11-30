@@ -52,6 +52,6 @@ class RandomStyleTransform:
                     generated_images = image_transform_net(samples)
 
                 dataset_aug.append_images(generated_images)
-                dataset_aug.append_labels(torch.full((generated_images.size(0)), label))
+                dataset_aug.append_labels(torch.ones(generated_images.size(0)) * label)
 
         return dataset_aug
