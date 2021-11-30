@@ -28,7 +28,7 @@ class RandomStyleTransform:
         dataset_aug = copy.deepcopy(dataset)
 
         labels_occurrences = torch.bincount(labels, minlength=7)
-        labels_to_generate = (labels_occurrences * weights).floor().numpy()
+        labels_to_generate = (labels_occurrences * weights).floor().cpu().numpy()
 
         image_transform_net = itn.ImageTransformNet().to(device)
         n_styles = len(self.style_weights)
