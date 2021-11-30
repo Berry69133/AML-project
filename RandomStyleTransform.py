@@ -17,28 +17,40 @@ class RandomStyleTransform:
             self.style_weights.append(torch.load(style_path))
 
     # expected input tensor of size (BxCxHxW)
-    def apply(self, dataset: FER2013Dataset, weights):
+    # [0, 0.5, 1, 0.3, ...]
+    def apply(self, dataset: FER2013Dataset, weights: torch.tensor):
         device = "cuda" if torch.cuda.is_available() else "cpu"
 
         images = dataset.get_images().to(device)
         labels = dataset.get_labels().to(device)
+        weights = weights.to(device)
+        dataset_aug = dataset.cpu().copy().to(device)
+
+        labels_occurrences = torch.bincount(labels, minlength=7)
+        labels_to_generate = (labels_occurrences * weights).floor()
 
         image_transform_net = itn.ImageTransformNet().to(device)
         n_styles = len(self.style_weights)
-        for label, weight in enumerate(weights):
+        for label in range(7):
             class_images = images[labels == label]
-            for class_image in class_images:
-                class_image = class_image.unsqueeze(0)
-                # load weights of randomly chosen style
+            for i in range(0, labels_to_generate[labels], 100):
+                # sample of size 100
+                perm = torch.randperm(class_images.size(0))
+                idx = perm[:100]
+                samples = class_images[idx]
+
+                # delete extracted elements
+                mask = torch.ones(class_images.numel(), dtype=torch.bool)
+                mask[idx] = False
+                class_images = class_images[mask]
+
                 random_choice = random.randint(0, n_styles - 1)
                 random_style_weights = self.style_weights[random_choice]
                 image_transform_net.load_state_dict(random_style_weights)
-
-                # apply transformation
                 with torch.no_grad():
-                    generated_image = image_transform_net(class_image)
+                    generated_images = image_transform_net(samples)
 
-                dataset.append_images(generated_image)
-                dataset.append_labels(torch.tensor(label).unsqueeze(0))
+                dataset_aug.append_images(generated_images)
+                dataset_aug.append_labels(torch.full(generated_images.size(0), label))
 
-        return dataset
+        return dataset_aug
