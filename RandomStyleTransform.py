@@ -34,7 +34,7 @@ class RandomStyleTransform:
         n_styles = len(self.style_weights)
         for label in range(7):
             class_images = images[labels == label]
-            for i in range(0, labels_to_generate[labels], 100):
+            for i in range(0, labels_to_generate[label], 100):
                 # sample of size 100
                 perm = torch.randperm(class_images.size(0))
                 idx = perm[:100]
