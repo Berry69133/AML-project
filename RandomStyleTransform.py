@@ -41,7 +41,7 @@ class RandomStyleTransform:
                 samples = class_images[idx]
 
                 # delete extracted elements
-                mask = torch.ones(class_images.numel(), dtype=torch.bool)
+                mask = torch.ones(class_images.size(0), dtype=torch.bool)
                 mask[idx] = False
                 class_images = class_images[mask]
 
