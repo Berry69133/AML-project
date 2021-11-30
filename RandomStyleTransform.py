@@ -28,13 +28,13 @@ class RandomStyleTransform:
         dataset_aug = copy.deepcopy(dataset)
 
         labels_occurrences = torch.bincount(labels, minlength=7)
-        labels_to_generate = (labels_occurrences * weights).floor()
+        labels_to_generate = (labels_occurrences * weights).floor().numpy()
 
         image_transform_net = itn.ImageTransformNet().to(device)
         n_styles = len(self.style_weights)
         for label in range(7):
             class_images = images[labels == label]
-            for i in range(0, labels_to_generate[label], 100):
+            for _ in range(0, labels_to_generate[label], 100):
                 # sample of size 100
                 perm = torch.randperm(class_images.size(0))
                 idx = perm[:100]
