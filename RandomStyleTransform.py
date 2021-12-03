@@ -46,7 +46,7 @@ class RandomStyleTransform:
                 class_images = class_images[mask]
 
                 random_choice = random.randint(0, n_styles - 1)
-                random_style_weights = self.style_weights[2]
+                random_style_weights = self.style_weights[3]
                 image_transform_net.load_state_dict(random_style_weights)
                 with torch.no_grad():
                     generated_images = image_transform_net(samples)
